@@ -19,6 +19,7 @@ import argparse
 import sys
 import copy
 import os
+import glob
 import scipy as sp
 import numpy as np
 import tensorflow as tf
@@ -44,7 +45,7 @@ if __name__ == '__main__':
   
   mod = sys.argv[2]
   if mod == 'train':
-    all_spec = ['./chunck_*.pkgz']
+    all_spec = glob.glob('./chunck_*.pkgz')
     X = []
     for i in range(len(all_spec)):
       s = load(all_spec[i])
@@ -91,7 +92,7 @@ if __name__ == '__main__':
                   c_dim=1,
                   checkpoint_dir=FLAGS.checkpoint_dir, 
                   lam=0.1)
-    dcgan.train(FLAGS, X_train)
+    dcgan.train(FLAGS, X)
     
   elif mod == 'predict':
     spectrum = ['./input_spectrum.dat']
@@ -114,8 +115,8 @@ if __name__ == '__main__':
     parser.add_argument('--nIter', type=int, default=1001)
     parser.add_argument('--imgSize', type=int, default=33)
     parser.add_argument('--lam', type=float, default=0.1)
-    parser.add_argument('--checkpointDir', type=str, default='checkpoint_new_correct')
-    parser.add_argument('--outDir', type=str, default='exogan_test/input_spectrum/')
+    parser.add_argument('--checkpointDir', type=str, default='checkpoint_test')
+    parser.add_argument('--outDir', type=str, default='exogan_output')
     parser.add_argument('--outInterval', type=int, default=50)
     parser.add_argument('--maskType', type=str,
                         choices=['random', 'center', 'left', 'full', 
