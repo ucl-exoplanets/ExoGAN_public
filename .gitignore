@@ -1,0 +1,5 @@
+*.pyc
+checkpoint*
+exogan_output
+logs
+training_set
