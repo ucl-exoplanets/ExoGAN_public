@@ -247,8 +247,13 @@ def get_spectral_matrix(path, parfile=None, size=23):
     _, wnw_min = find_nearest(wnw_grid, max(spec[:, 0]))
     _, wnw_max = find_nearest(wnw_grid, min(spec[:, 0]))
     
-    spectrum = np.zeros(len(wnw_grid))
+    spectrum, spec_err = np.zeros(len(wnw_grid)), np.zeros(len(wnw_grid))
     spectrum[wnw_min:wnw_max + 1] = spec[:, 1] * radius_fac
+    spec_err[wnw_min:wnw_max + 1] = spec[:, 2] * radius_fac
+    
+    spectrum = np.random.normal(spectrum, spec_err)
+    
+     
 
     max_s = np.mean(spectrum) / global_maximum
     mean_param = [max_s] * half_row
@@ -413,7 +418,6 @@ def get_test_image(X, sigma=0.0, size=33, batch_size=64, parfile=None, wfc3=Fals
   wnw = np.genfromtxt('./wnw_grid.txt')
 
   new_zeros = np.zeros((size, size, 1))
-
   for i in range(batch_size):
     output = test(X)
     new_zeros[:size, :size, 0] = output[:size, :size, 0]
